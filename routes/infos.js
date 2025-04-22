@@ -43,6 +43,8 @@ router.get('/iot', (req, res) => {
  */
 router.post('/iot', (req, res) => {
     const { device_id, temperature, humidity, timestamp, type } = req.body;
+    console.log(req.body);
+
     if (!device_id || !temperature || !humidity || !timestamp || !type) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
