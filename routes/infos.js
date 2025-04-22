@@ -17,7 +17,7 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Info'
  */
-router.get('/iot', (req, res) => {
+router.get('/', (req, res) => {
     db.all('SELECT * FROM infos', [], (err, rows) => {
         if (err) {
             return res.status(500).json({ error: err.message });
@@ -41,7 +41,7 @@ router.get('/iot', (req, res) => {
  *       201:
  *         description: Données ajoutées avec succès
  */
-router.post('/iot', (req, res) => {
+router.post('/', (req, res) => {
     const { device_id, temperature, humidity, timestamp, type } = req.body;
     console.log(req.body);
 
