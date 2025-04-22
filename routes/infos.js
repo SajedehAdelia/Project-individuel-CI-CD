@@ -18,7 +18,7 @@ const router = express.Router();
  *                 $ref: '#/components/schemas/Info'
  */
 router.get('/', (req, res) => {
-    db.all('SELECT * FROM infos', [], (err, rows) => {
+    db.all('SELECT * FROM infos order by timestamp desc limit 20', [], (err, rows) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
