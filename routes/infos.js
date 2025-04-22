@@ -7,6 +7,13 @@ const router = express.Router();
  * /iot:
  *   get:
  *     summary: Récupérer les données IoT
+ *     parameters:
+ *       - in: query
+ *         name: last_id
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: ID de départ pour récupérer les 20 enregistrements suivants (par ID croissant)
  *     responses:
  *       200:
  *         description: Liste des données IoT
