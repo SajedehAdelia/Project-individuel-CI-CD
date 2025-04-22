@@ -24,17 +24,43 @@ const router = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Info'
  */
+
 router.get('/', (req, res) => {
+    let sql = `
+        SELECT i.device_id, i.temperature, i.humidity, i.timestamp, i.type
+        FROM infos i
+        INNER JOIN (
+            SELECT device_id, MAX(timestamp) AS max_timestamp
+            FROM infos
+            GROUP BY device_id
+        ) latest ON i.device_id = latest.device_id AND i.timestamp = latest.max_timestamp
+		ORDER BY 1;
+    `;
+
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json(rows);
+    });
+});
+router.get('/data', (req, res) => {
+    const device_id = req.query.device_id;
     const lastId = req.query.last_id;
 
+    // Vérifie que device_id est fourni
+    if (!device_id) {
+        return res.status(400).json({ error: "Paramètre 'device_id' obligatoire." });
+    }
+
     let sql;
-    let params = [];
+    let params = [device_id];
 
     if (lastId) {
-        sql = 'SELECT * FROM infos WHERE id < ? ORDER BY timestamp desc LIMIT 20';
-        params = [lastId];
+        sql = "SELECT * FROM infos WHERE device_id = ? AND id < ? ORDER BY timestamp DESC LIMIT 20";
+        params.push(lastId);
     } else {
-        sql = 'SELECT * FROM infos ORDER BY timestamp DESC LIMIT 20';
+        sql = "SELECT * FROM infos WHERE device_id = ? ORDER BY timestamp DESC LIMIT 20";
     }
 
     db.all(sql, params, (err, rows) => {
@@ -44,6 +70,8 @@ router.get('/', (req, res) => {
         res.json(rows);
     });
 });
+
+
 
 
 /**
