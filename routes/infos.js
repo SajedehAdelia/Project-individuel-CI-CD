@@ -18,13 +18,26 @@ const router = express.Router();
  *                 $ref: '#/components/schemas/Info'
  */
 router.get('/', (req, res) => {
-    db.all('SELECT * FROM infos order by timestamp desc limit 20', [], (err, rows) => {
+    const lastId = req.query.last_id;
+
+    let sql;
+    let params = [];
+
+    if (lastId) {
+        sql = 'SELECT * FROM infos WHERE id < ? ORDER BY timestamp desc LIMIT 20';
+        params = [lastId];
+    } else {
+        sql = 'SELECT * FROM infos ORDER BY timestamp DESC LIMIT 20';
+    }
+
+    db.all(sql, params, (err, rows) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
         res.json(rows);
     });
 });
+
 
 /**
  * @swagger
