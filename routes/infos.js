@@ -26,7 +26,7 @@ const router = express.Router();
  */
 
 router.get('/', (req, res) => {
-    let sql = `
+  let sql = `
         SELECT i.device_id, i.temperature, i.humidity, i.timestamp, i.type
         FROM infos i
         INNER JOIN (
@@ -37,38 +37,38 @@ router.get('/', (req, res) => {
 		ORDER BY 1;
     `;
 
-    db.all(sql, [], (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(rows);
-    });
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(rows);
+  });
 });
 router.get('/data', (req, res) => {
-    const device_id = req.query.device_id;
-    const lastId = req.query.last_id;
+  const device_id = req.query.device_id;
+  const lastId = req.query.last_id;
 
-    // Vérifie que device_id est fourni
-    if (!device_id) {
-        return res.status(400).json({ error: "Paramètre 'device_id' obligatoire." });
+  // Vérifie que device_id est fourni
+  if (!device_id) {
+    return res.status(400).json({ error: 'Paramètre \'device_id\' obligatoire.' });
+  }
+
+  let sql;
+  let params = [device_id];
+
+  if (lastId) {
+    sql = 'SELECT * FROM infos WHERE device_id = ? AND id < ? ORDER BY timestamp DESC LIMIT 20';
+    params.push(lastId);
+  } else {
+    sql = 'SELECT * FROM infos WHERE device_id = ? ORDER BY timestamp DESC LIMIT 20';
+  }
+
+  db.all(sql, params, (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
     }
-
-    let sql;
-    let params = [device_id];
-
-    if (lastId) {
-        sql = "SELECT * FROM infos WHERE device_id = ? AND id < ? ORDER BY timestamp DESC LIMIT 20";
-        params.push(lastId);
-    } else {
-        sql = "SELECT * FROM infos WHERE device_id = ? ORDER BY timestamp DESC LIMIT 20";
-    }
-
-    db.all(sql, params, (err, rows) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.json(rows);
-    });
+    res.json(rows);
+  });
 });
 
 
@@ -90,27 +90,27 @@ router.get('/data', (req, res) => {
  *         description: Données ajoutées avec succès
  */
 router.post('/', (req, res) => {
-    const { device_id, temperature, humidity, timestamp, type } = req.body;
-    console.log(req.body);
+  const { device_id, temperature, humidity, timestamp, type } = req.body;
+  console.log(req.body);
 
-    if (!device_id || !temperature || !humidity || !timestamp || !type) {
-        return res.status(400).json({ error: 'Missing required fields' });
+  if (!device_id || !temperature || !humidity || !timestamp || !type) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  const query = 'INSERT INTO infos (device_id, temperature, humidity, timestamp, type) VALUES (?, ?, ?, ?, ?)';
+  db.run(query, [device_id, temperature, humidity, timestamp, type], function (err) {
+    if (err) {
+      return res.status(500).json({ error: err.message });
     }
-
-    const query = 'INSERT INTO infos (device_id, temperature, humidity, timestamp, type) VALUES (?, ?, ?, ?, ?)';
-    db.run(query, [device_id, temperature, humidity, timestamp, type], function (err) {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        res.status(201).json({
-            id: this.lastID,
-            device_id,
-            temperature,
-            humidity,
-            timestamp,
-            type
-        });
+    res.status(201).json({
+      id: this.lastID,
+      device_id,
+      temperature,
+      humidity,
+      timestamp,
+      type
     });
+  });
 });
 
 module.exports = router;
