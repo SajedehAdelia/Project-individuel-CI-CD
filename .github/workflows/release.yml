@@ -15,11 +15,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Git identity
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -40,8 +35,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.event.head_commit.message }}
-          release_name: Release ${{ github.event.head_commit.message }}
+          tag_name: $(git describe --tags --abbrev=0)
+          release_name: Release $(git describe --tags --abbrev=0)
           body: |
             # Changelog
             ${{ steps.changelog.outputs.content }}
