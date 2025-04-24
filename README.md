@@ -11,5 +11,8 @@
     ```
 4. Vérifiez que l'API est accessible via `http://0.0.0.0:3000` (ou l'IP locale)
 
-#### Statut du workflow :
+#### Statut du workflow de test :
 ![workflow](https://github.com/Projet-CI-CD/API/actions/workflows/ci.yml/badge.svg)
+
+#### Statut du workflow de release :
+![workflow](https://github.com/Projet-CI-CD/API/actions/workflows/release.yml/badge.svg)
