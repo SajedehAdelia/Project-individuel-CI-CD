@@ -1,9 +1,9 @@
 const request = require('supertest');
 const express = require('express');
-const router = require('./infos'); // Importez le fichier des routes
-const db = require('../utils/db'); // Mockez la base de données
+const router = require('../routes/infos.js'); // Importez le fichier des routes
+const db = require('../utils/db.js'); // Mockez la base de données
 
-jest.mock('../utils/db'); // Mock de la base de données
+jest.mock('../utils/db.js'); // Mock de la base de données
 
 const app = express();
 app.use(express.json());
