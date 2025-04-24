@@ -23,28 +23,19 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Generate Changelog
-        run: npx conventional-changelog-cli -p eslint -i CHANGELOG.md -s
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Commit updated changelog
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add CHANGELOG.md
-          git commit -m "chore: update changelog for ${{ github.ref_name }}"
-          git push
+      - name: Read Changelog
+        id: changelog
+        run: echo "::set-output name=content::$(cat CHANGELOG.md)"
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref_name }}
+          tag_name: ${{ github.run_number }}
           release_name: Release ${{ github.ref_name }}
           body: |
             ## Changelog
-            - Ajoutez ici les détails de la release.
+            ${{ steps.changelog.outputs.content }}
           draft: false
           prerelease: false
