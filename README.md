@@ -10,3 +10,6 @@
     npm start
     ```
 4. Vérifiez que l'API est accessible via `http://0.0.0.0:3000` (ou l'IP locale)
+
+#### Statut du workflow :
+![workflow](https://github.com/Projet-CI-CD/API/actions/workflows/ci.yml/badge.svg)
