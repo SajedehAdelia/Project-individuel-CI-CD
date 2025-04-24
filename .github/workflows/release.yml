@@ -23,6 +23,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Bump version and create tag
+        run: |
+          npx standard-version --release-as patch
+          git push --follow-tags origin main
+
       - name: Read Changelog
         id: changelog
         run: echo "::set-output name=content::$(cat CHANGELOG.md)"
@@ -32,10 +37,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.run_number }}
-          release_name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.event.head_commit.message }}
+          release_name: Release ${{ github.event.head_commit.message }}
           body: |
-            ## Changelog
+            # Changelog
             ${{ steps.changelog.outputs.content }}
           draft: false
           prerelease: false
