@@ -26,8 +26,8 @@ jobs:
 
       - name: 👤 Set Git user for GitHub App
         run: |
-          git config user.name "GitHub App"
-          git config user.email "github-app@users.noreply.github.com"
+          git config user.name "release-ci-cd[bot]"
+          git config user.email "release-ci-cd[bot]@users.noreply.github.com"
 
       - name: 📦 Install dependencies
         run: npm install
