@@ -24,10 +24,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: 👤 Set Git user
+      - name: 👤 Set Git user for GitHub App
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          echo "GH_TOKEN=${{ secrets.APP_TOKEN }}" >> $GITHUB_ENV 
+          git config user.name "GitHub App"
+          git config user.email "github-app@users.noreply.github.com"
 
       - name: 📦 Install dependencies
         run: npm install
@@ -37,7 +38,7 @@ jobs:
 
       - name: 🚀 Run release.sh with standard-version
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.APP_TOKEN }}
         run: ./release.sh standard-version
 
       - name: ✅ Done
