@@ -24,10 +24,17 @@ jobs:
         with:
           node-version: '20'
 
-      - name: 👤 Set Git user for GitHub App
+      - name: 🔑 Authenticate as GitHub App
+        uses: tibdex/github-app-token@v2
+        id: generate_token
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: 🧪 Configure Git user
         run: |
-          git config user.name "release-ci-cd[bot]"
-          git config user.email "release-ci-cd[bot]@users.noreply.github.com"
+          git config user.name "my-github-app[bot]"
+          git config user.email "my-github-app[bot]@users.noreply.github.com"
 
       - name: 📦 Install dependencies
         run: npm install
@@ -37,7 +44,7 @@ jobs:
 
       - name: 🚀 Run release.sh with standard-version
         env:
-          GH_TOKEN: ${{ secrets.APP_TOKEN }}
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: ./release.sh standard-version
 
       - name: ✅ Done
