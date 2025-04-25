@@ -21,6 +21,11 @@ jobs:
         with:
           node-version: '20'
 
+      - name: 👤 Set Git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: 📦 Install dependencies
         run: npm install
 
