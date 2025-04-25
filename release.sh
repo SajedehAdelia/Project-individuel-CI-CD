@@ -26,7 +26,7 @@ release_with_standard_version() {
   echo "📦 Nouvelle version : v$VERSION"
 
   echo "🏷️ Création du tag git..."
-  git push origin "v$VERSION"
+  git push --follow-tags origin main
 
   echo "🚀 Création de la release GitHub..."
   gh release create "v$VERSION" -F CHANGELOG.md --title "Release v$VERSION"
