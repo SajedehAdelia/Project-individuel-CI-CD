@@ -20,7 +20,7 @@ fi
 # Fonction release avec standard-version
 release_with_standard_version() {
   echo "🔧 Incrémentation de version (standard-version)..."
-  npx standard-version --release-as minor
+  npx standard-version --release-as minor --changelog
 
   VERSION=$(jq -r '.version' package.json)
   echo "📦 Nouvelle version : v$VERSION"
