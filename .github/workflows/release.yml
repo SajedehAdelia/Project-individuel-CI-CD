@@ -26,7 +26,6 @@ jobs:
 
       - name: 👤 Set Git user for GitHub App
         run: |
-          echo "GH_TOKEN=${{ secrets.APP_TOKEN }}" >> $GITHUB_ENV 
           git config user.name "GitHub App"
           git config user.email "github-app@users.noreply.github.com"
 
