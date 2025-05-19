@@ -40,9 +40,9 @@ jobs:
         docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/default/${{ env.SERVICE }}:${{ github.sha }}
 
     - name: Deploy to Cloud Run
-      uses: google-github-actions/deploy-cloudrun@v2
-      with:
-        service: ${{ env.SERVICE }}
-        image: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/default/${{ env.SERVICE }}:${{ github.sha }}
-        region: ${{ env.REGION }}
-        allow-unauthenticated: true
+      run: |
+        gcloud run deploy ${{ env.SERVICE }} \
+          --image=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/default/${{ env.SERVICE }}:${{ github.sha }} \
+          --region=${{ env.REGION }} \
+          --platform=managed \
+          --allow-unauthenticated
