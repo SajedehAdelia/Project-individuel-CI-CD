@@ -1,5 +1,5 @@
 # Utilise une image officielle de Node.js
-FROM node:18
+FROM node:22
 
 # Dossier de travail dans le conteneur
 WORKDIR /app
@@ -13,8 +13,10 @@ RUN npm install
 # Copie le reste du code
 COPY . .
 
+ENV PORT=8080
+
 # Expose le port (à adapter si nécessaire)
-EXPOSE 8080
+EXPOSE $PORT
 
 # Lance l'application
 CMD ["npm", "start"]
