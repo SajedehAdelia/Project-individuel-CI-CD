@@ -15,7 +15,7 @@ const options = {
     openapi: '3.0.0',
     info: {
       title: 'API IoT',
-      version: '1.0.0',
+      version: packageJson.version,
       description: 'Documentation de l\'API IoT',
     },
   },
