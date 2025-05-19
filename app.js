@@ -7,6 +7,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 
 const infosRouter = require('./routes/infos');
+const packageJson = require('./package.json');
 
 const app = express();
 
@@ -15,7 +16,7 @@ const options = {
     openapi: '3.0.0',
     info: {
       title: 'API IoT',
-      version: '1.0.0',
+      version: packageJson.version,
       description: 'Documentation de l\'API IoT',
     },
   },
