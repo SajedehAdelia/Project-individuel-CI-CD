@@ -13,8 +13,10 @@ RUN npm install
 # Copie le reste du code
 COPY . .
 
+ENV PORT=8080
+
 # Expose le port (à adapter si nécessaire)
-EXPOSE 8080
+EXPOSE $PORT
 
 # Lance l'application
 CMD ["npm", "start"]
