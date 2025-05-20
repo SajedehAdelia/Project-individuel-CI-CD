@@ -119,8 +119,10 @@ router.get('/data', (req, res) => {
  *         description: Données ajoutées avec succès
  */
 router.post('/', (req, res) => {
-  const { device_id, temperature, humidity, timestamp, type } = req.body;
+  const { device_id, temperature, humidity, type } = req.body;
   console.log(req.body);
+
+  let timestamp = new Date().toISOString();
 
   if (!device_id || !temperature || !humidity || !timestamp || !type) {
     return res.status(400).json({ error: 'Missing required fields' });
