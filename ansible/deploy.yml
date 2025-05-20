@@ -48,11 +48,12 @@
         dest: /opt/api
         update: yes
     
-    - name: Construire et lancer l'application avec Docker Compose
-      community.docker.docker_compose:
+    - name: Construire et lancer l'application avec Docker Compose (v2)
+      community.docker.docker_compose_v2:
         project_src: /opt/api
         build: true
-        state: present
+        state: up
+        remove_orphans: true
 
     #- name: Construire l’image Docker à partir du Dockerfile
     #  docker_image:
