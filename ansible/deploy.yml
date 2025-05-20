@@ -52,7 +52,7 @@
       community.docker.docker_compose_v2:
         project_src: /opt/api
         build: true
-        state: up
+        state: restarted
         remove_orphans: true
 
     #- name: Construire l’image Docker à partir du Dockerfile
