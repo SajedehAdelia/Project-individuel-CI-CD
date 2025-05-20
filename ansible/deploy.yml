@@ -44,9 +44,10 @@
     - name: Construire l’image Docker à partir du Dockerfile
       docker_image:
         name: projet-api
-        path: /opt/api
         tag: latest
         source: build
+        build:
+          path: /opt/api
 
     - name: Lancer le conteneur Docker de l’API
       docker_container:
