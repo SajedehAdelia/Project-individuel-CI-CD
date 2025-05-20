@@ -54,8 +54,7 @@
         name: api
         image: projet-api:latest
         state: started
-        recreate: yes
-        force_restart: yes
+        recreate: yes        
         restart_policy: always
         ports:
           - "3000:8080"
