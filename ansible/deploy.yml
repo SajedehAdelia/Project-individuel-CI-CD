@@ -14,7 +14,7 @@
 
     - name: Cloner le dépôt API
       git:
-        repo: 'https://github.com/Fryxis/projet-5.git'
+        repo: 'https://github.com/Projet-CI-CD/API.git'
         dest: /home/lennytooxikx/api
         update: yes
 
