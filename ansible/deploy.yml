@@ -26,11 +26,32 @@
         node -v
         npm -v
 
-    - name: Cloner le dépôt API
+    - name: Cloner le dépôt API dans /root/api
       git:
         repo: 'https://github.com/Projet-CI-CD/API.git'
-        dest: /home/lennytooxikx/api
+        dest: /root/api
         update: yes
+
+    - name: Installer les dépendances Node.js (en root)
+      args:
+        chdir: /root/api
+      shell: |
+        npm install
+
+    - name: Lancer l'API avec npm start (en arrière-plan en root)
+      args:
+        chdir: /root/api
+      shell: |
+        nohup npm start > app.log 2>&1 &
+
+    - name: Vérifier le log de démarrage
+      shell: tail -n 10 /root/api/app.log || echo "Log vide ou inexistant"
+      
+    #- name: Cloner le dépôt API
+    #  git:
+    #    repo: 'https://github.com/Projet-CI-CD/API.git'
+    #    dest: /home/lennytooxikx/api
+    #    update: yes
 
     #- name: Donner les droits à l'utilisateur lennytooxikx
     #  file:
@@ -39,20 +60,20 @@
     #    group: lennytooxikx
     #    recurse: yes
 
-    - name: Installer les dépendances Node.js
-      become_user: lennytooxikx
-      args:
-        chdir: /home/lennytooxikx/api
-      shell: |
-        npm install
+    #- name: Installer les dépendances Node.js
+    #  become_user: lennytooxikx
+    #  args:
+    #    chdir: /home/lennytooxikx/api
+    #  shell: |
+    #    npm install
 
-    - name: Lancer l'API avec npm start (en arrière-plan)
-      become_user: lennytooxikx
-      args:
-        chdir: /home/lennytooxikx/api
-      shell: |
-        nohup npm start > app.log 2>&1 &
+    #- name: Lancer l'API avec npm start (en arrière-plan)
+    #  become_user: lennytooxikx
+    #  args:
+    #    chdir: /home/lennytooxikx/api
+    #  shell: |
+    #    nohup npm start > app.log 2>&1 &
 
-    - name: Vérifier le log de démarrage
-      become_user: lennytooxikx
-      shell: tail -n 10 /home/lennytooxikx/api/app.log || echo "Log vide ou inexistant"
+    #- name: Vérifier le log de démarrage
+    #  become_user: lennytooxikx
+    #  shell: tail -n 10 /home/lennytooxikx/api/app.log || echo "Log vide ou inexistant"
