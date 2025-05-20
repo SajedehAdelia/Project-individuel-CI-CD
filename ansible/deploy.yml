@@ -1,0 +1,44 @@
+---
+- name: Déployer l'API
+  hosts: api
+  become: true
+
+  tasks:
+    - name: Installer les paquets nécessaires (git, curl, npm)
+      apt:
+        name:
+          - git
+          - curl
+          - npm
+        update_cache: yes
+
+    - name: Cloner le dépôt API
+      git:
+        repo: 'https://github.com/Fryxis/projet-5.git'
+        dest: /home/lennytooxikx/api
+        update: yes
+
+    - name: Donner les droits à l'utilisateur lennytooxikx
+      file:
+        path: /home/lennytooxikx/api
+        owner: lennytooxikx
+        group: lennytooxikx
+        recurse: yes
+
+    - name: Installer les dépendances Node.js
+      become_user: lennytooxikx
+      args:
+        chdir: /home/lennytooxikx/api
+      shell: |
+        npm install
+
+    - name: Lancer l'API avec npm start (en arrière-plan)
+      become_user: lennytooxikx
+      args:
+        chdir: /home/lennytooxikx/api
+      shell: |
+        nohup npm start > app.log 2>&1 &
+
+    - name: Vérifier le log de démarrage
+      become_user: lennytooxikx
+      shell: tail -n 10 /home/lennytooxikx/api/app.log || echo "Log vide ou inexistant"
