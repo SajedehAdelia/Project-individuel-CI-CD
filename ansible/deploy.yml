@@ -31,11 +31,6 @@
           - docker-compose-plugin
         state: present
 
-    #- name: Installer Docker Engine
-    #  apt:
-    #    name: docker-ce
-    #    state: present
-
     - name: Démarrer et activer Docker
       service:
         name: docker
@@ -53,28 +48,3 @@
       args:
         chdir: /opt/api
     
-    #- name: Construire et lancer l'application avec Docker Compose (v2)
-    #  community.docker.docker_compose_v2:
-    #    project_src: /opt/api
-    #    build: always
-    #    state: restarted
-    #    remove_orphans: true
-
-    #- name: Construire l’image Docker à partir du Dockerfile
-    #  docker_image:
-    #    name: projet-api
-    #    tag: latest
-    #    source: build
-    #    build:
-    #      path: /opt/api
-
-    #- name: Lancer (ou recréer) le conteneur Docker de l’API
-    #  docker_container:
-    #    name: api
-    #    image: projet-api:latest
-    #    state: started
-    #    recreate: yes        
-    #    restart_policy: always
-    #    ports:
-    #      - "3000:8080"
-    #    working_dir: /app

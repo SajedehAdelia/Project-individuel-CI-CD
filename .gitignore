@@ -32,3 +32,8 @@ coverage/
 
 # Base de données SQLite
 *.db
+
+# Clé ssh 
+.ssh/
+.ssh/id_rsa
+.ssh/id_rsa.pub
