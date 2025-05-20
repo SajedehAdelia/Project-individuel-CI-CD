@@ -44,6 +44,65 @@ router.get('/', (req, res) => {
     res.json(rows);
   });
 });
+
+/**
+ * @swagger
+ * /data:
+ *   get:
+ *     summary: Récupère les dernières données pour un appareil donné.
+ *     description: Récupère les 20 dernières entrées de la table `infos` associées à un `device_id` donné, optionnellement inférieures à un `last_id`.
+ *     parameters:
+ *       - in: query
+ *         name: device_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Identifiant de l'appareil à interroger.
+ *       - in: query
+ *         name: last_id
+ *         required: false
+ *         schema:
+ *           type: integer
+ *         description: ID maximum (exclus) des données à récupérer, pour la pagination.
+ *     responses:
+ *       200:
+ *         description: Liste des données.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   device_id:
+ *                     type: string
+ *                   value:
+ *                     type: number
+ *                   timestamp:
+ *                     type: string
+ *                     format: date-time
+ *       400:
+ *         description: Paramètre `device_id` manquant.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *       500:
+ *         description: Erreur serveur (ex: requête SQL échouée).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
+
 router.get('/data', (req, res) => {
   const device_id = req.query.device_id;
   const lastId = req.query.last_id;
