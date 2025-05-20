@@ -13,30 +13,18 @@
           - curl
         update_cache: yes
 
-    - name: Ajouter la clé GPG officielle de NodeSource
-      apt_key:
-        url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
-        state: present
+    - name: Ajouter NodeSource et installer Node.js 22.x
+      environment:
+        DEBIAN_FRONTEND: noninteractive
+      shell: |
+        curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+        sudo apt update
+        sudo apt install -y nodejs
 
-    - name: Ajouter le dépôt Node.js {{ NODEJS_VERSION }}.x
-      apt_repository:
-        repo: "deb https://deb.nodesource.com/node_{{ NODEJS_VERSION }}.x {{ ansible_distribution_release | lower }} main"
-        state: present
-        update_cache: yes
-
-    - name: Installer Node.js {{ NODEJS_VERSION }}
-      apt:
-        name: nodejs
-        state: present
-
-    - name: Vérifier la version installée de Node.js
-      shell: node -v
-      register: node_version_output
-      changed_when: false
-
-    - name: Afficher la version installée
-      debug:
-        var: node_version_output.stdout
+    - name: Vérifier les versions installées
+      shell: |
+        node -v
+        npm -v
 
     - name: Cloner le dépôt API
       git:
