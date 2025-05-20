@@ -49,11 +49,13 @@
         build:
           path: /opt/api
 
-    - name: Lancer le conteneur Docker de l’API
+    - name: Lancer (ou recréer) le conteneur Docker de l’API
       docker_container:
         name: api
         image: projet-api:latest
         state: started
+        recreate: yes
+        force_restart: yes
         restart_policy: always
         ports:
           - "3000:8080"
