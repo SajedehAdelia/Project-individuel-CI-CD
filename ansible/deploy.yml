@@ -2,15 +2,41 @@
 - name: Déployer l'API
   hosts: api
   become: true
+  vars:
+      NODEJS_VERSION: "22"
 
   tasks:
-    - name: Installer les paquets nécessaires (git, curl, npm)
+    - name: Installer les paquets nécessaires (git, curl)
       apt:
         name:
           - git
           - curl
-          - npm
         update_cache: yes
+
+    - name: Ajouter la clé GPG officielle de NodeSource
+      apt_key:
+        url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+        state: present
+
+    - name: Ajouter le dépôt Node.js {{ NODEJS_VERSION }}.x
+      apt_repository:
+        repo: "deb https://deb.nodesource.com/node_{{ NODEJS_VERSION }}.x {{ ansible_distribution_release | lower }} main"
+        state: present
+        update_cache: yes
+
+    - name: Installer Node.js {{ NODEJS_VERSION }}
+      apt:
+        name: nodejs
+        state: present
+
+    - name: Vérifier la version installée de Node.js
+      shell: node -v
+      register: node_version_output
+      changed_when: false
+
+    - name: Afficher la version installée
+      debug:
+        var: node_version_output.stdout
 
     - name: Cloner le dépôt API
       git:
