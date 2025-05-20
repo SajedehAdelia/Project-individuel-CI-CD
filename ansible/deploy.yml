@@ -51,7 +51,7 @@
     - name: Construire et lancer l'application avec Docker Compose (v2)
       community.docker.docker_compose_v2:
         project_src: /opt/api
-        build: true
+        build: always
         state: restarted
         remove_orphans: true
 
