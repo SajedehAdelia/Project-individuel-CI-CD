@@ -24,10 +24,17 @@
         state: present
         update_cache: yes
 
-    - name: Installer Docker Engine
+    - name: Installer Docker Engine et Compose
       apt:
-        name: docker-ce
+        name:
+          - docker-ce
+          - docker-compose-plugin
         state: present
+
+    #- name: Installer Docker Engine
+    #  apt:
+    #    name: docker-ce
+    #    state: present
 
     - name: Démarrer et activer Docker
       service:
@@ -40,22 +47,28 @@
         repo: https://github.com/Projet-CI-CD/API.git
         dest: /opt/api
         update: yes
+    
+    - name: Construire et lancer l'application avec Docker Compose
+      community.docker.docker_compose:
+        project_src: /opt/api
+        build: true
+        state: present
 
-    - name: Construire l’image Docker à partir du Dockerfile
-      docker_image:
-        name: projet-api
-        tag: latest
-        source: build
-        build:
-          path: /opt/api
+    #- name: Construire l’image Docker à partir du Dockerfile
+    #  docker_image:
+    #    name: projet-api
+    #    tag: latest
+    #    source: build
+    #    build:
+    #      path: /opt/api
 
-    - name: Lancer (ou recréer) le conteneur Docker de l’API
-      docker_container:
-        name: api
-        image: projet-api:latest
-        state: started
-        recreate: yes        
-        restart_policy: always
-        ports:
-          - "3000:8080"
-        working_dir: /app
+    #- name: Lancer (ou recréer) le conteneur Docker de l’API
+    #  docker_container:
+    #    name: api
+    #    image: projet-api:latest
+    #    state: started
+    #    recreate: yes        
+    #    restart_policy: always
+    #    ports:
+    #      - "3000:8080"
+    #    working_dir: /app
