@@ -20,7 +20,7 @@ const options = {
       description: 'Documentation de l\'API IoT',
     },
   },
-  apis: ['./routes/*.js', './utils/swaggerComponents.js'],
+  apis: ['./api/routes/*.js', './api/utils/swaggerComponents.js'],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
