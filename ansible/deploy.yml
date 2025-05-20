@@ -32,12 +32,12 @@
         dest: /home/lennytooxikx/api
         update: yes
 
-    - name: Donner les droits à l'utilisateur lennytooxikx
-      file:
-        path: /home/lennytooxikx/api
-        owner: lennytooxikx
-        group: lennytooxikx
-        recurse: yes
+    #- name: Donner les droits à l'utilisateur lennytooxikx
+    #  file:
+    #    path: /home/lennytooxikx/api
+    #    owner: lennytooxikx
+    #    group: lennytooxikx
+    #    recurse: yes
 
     - name: Installer les dépendances Node.js
       become_user: lennytooxikx
