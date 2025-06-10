@@ -1,0 +1,48 @@
+---
+- name: Deploy the API
+  hosts: api
+  become: true
+  vars:
+    NODEJS_VERSION: "22"
+
+  tasks:
+    - name: Install required packages (git, curl)
+      apt:
+        name:
+          - git
+          - curl
+        update_cache: yes
+
+    - name: Add NodeSource and install Node.js 22.x
+      environment:
+        DEBIAN_FRONTEND: noninteractive
+      shell: |
+        curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+        sudo apt update
+        sudo apt install -y nodejs
+
+    - name: Check installed versions
+      shell: |
+        node -v
+        npm -v
+
+    - name: Clone the API repository into /root/api
+      git:
+        repo: 'https://github.com/Projet-CI-CD/API.git'
+        dest: /root/api
+        update: yes
+
+    - name: Install Node.js dependencies (as root)
+      args:
+        chdir: /root/api
+      shell: |
+        npm install
+
+    - name: Start the API with npm start (in background as root)
+      args:
+        chdir: /root/api
+      shell: |
+        nohup npm start > app.log 2>&1 &
+
+    - name: Check the startup log
+      shell: tail -n 10 /root/api/app.log || echo "Log is empty or missing"

@@ -1,0 +1,49 @@
+---
+- name: Deploy the API with Docker
+  hosts: api
+  become: true
+
+  tasks:
+    - name: Install required packages (Docker)
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        update_cache: yes
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+        state: present
+        update_cache: yes
+
+    - name: Install Docker Engine and Compose
+      apt:
+        name:
+          - docker-ce
+          - docker-compose-plugin
+        state: present
+
+    - name: Start and enable Docker
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Clone the API repository
+      git:
+        repo: https://github.com/Projet-CI-CD/API.git
+        dest: /opt/api
+        update: yes
+
+    - name: Launch the application using docker compose up -d --build
+      shell: docker compose up -d --build
+      args:
+        chdir: /opt/api
