@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.43.0](https://github.com/SajedehAdelia/Project-individuel-CI-CD/compare/v2.42.0...v2.43.0) (2025-06-10)
+
+
+### Features
+
+* add new structure integration ([15377a0](https://github.com/SajedehAdelia/Project-individuel-CI-CD/commit/15377a0cdf5328cd0ac7397766c29d351a2e6d37))
+
 ## 2.42.0 (2025-05-20)
 
 ## 2.41.0 (2025-05-20)
