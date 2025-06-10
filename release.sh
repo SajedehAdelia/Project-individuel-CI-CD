@@ -2,43 +2,43 @@
 
 set -e
 
-# Choix de l'outil
+# Tool selection
 TOOL=$1
 
 if [ -z "$TOOL" ]; then
-  echo "Quel outil souhaitez-vous utiliser ?"
+  echo "Which tool do you want to use?"
   echo "1) standard-version"
   echo "2) semantic-release"
-  read -p "Votre choix (1 ou 2) : " CHOICE
+  read -p "Your choice (1 or 2): " CHOICE
   case $CHOICE in
     1) TOOL="standard-version" ;;
     2) TOOL="semantic-release" ;;
-    *) echo "Choix invalide" && exit 1 ;;
+    *) echo "Invalid choice" && exit 1 ;;
   esac
 fi
 
-# Fonction release avec standard-version
+# Release function using standard-version
 release_with_standard_version() {
-  echo "🔧 Incrémentation de version (standard-version)..."
+  echo "🔧 Bumping version (standard-version)..."
   npx standard-version --release-as minor --changelog
 
   VERSION=$(jq -r '.version' package.json)
-  echo "📦 Nouvelle version : v$VERSION"
+  echo "📦 New version: v$VERSION"
 
-  echo "🏷️ Création du tag git..."
+  echo "🏷️ Creating git tag and pushing..."
   git push --follow-tags origin main
 
-  echo "🚀 Création de la release GitHub..."
+  echo "🚀 Creating GitHub release..."
   gh release create "v$VERSION" -F CHANGELOG.md --title "Release v$VERSION"
 }
 
-# Fonction release avec semantic-release
+# Release function using semantic-release
 release_with_semantic_release() {
-  echo "🧪 Simulation de release avec semantic-release"
+  echo "🧪 Running release with semantic-release..."
   npx semantic-release
 }
 
-# Lancer le bon outil
+# Run the selected tool
 case $TOOL in
   standard-version)
     release_with_standard_version
@@ -47,7 +47,7 @@ case $TOOL in
     release_with_semantic_release
     ;;
   *)
-    echo "Outil non reconnu : $TOOL"
+    echo "Unrecognised tool: $TOOL"
     exit 1
     ;;
 esac
